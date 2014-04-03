@@ -2,11 +2,10 @@ head
 	title Color Blend 
 	script(src = "http://code.jquery.com/jquery-1.11.0.min.js")
 body 
-	canvas( id='dataCanvas' width='500' height='500')
-	canvas(id='printCanvas' width='500' height='500')
 	div(id='buttons')
 		input(id='userPic' type='file' accept='image/*;capture=camera')
 		button(id='submit').
 			submit
-		img(id='someEl' src="#")
+
+	div(id='canvases')
 	script(src='colorblend.js' type= 'text/javascript')
