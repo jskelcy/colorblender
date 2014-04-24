@@ -14,12 +14,26 @@ $(document).ready(function(){
                 image.src = e.target.result;
                 canvasWidth = image.width;
                 canvasHeight = image.height;
+                console.log(canvasHeight, canvasWidth)
             }
         
         reader.readAsDataURL(userPic.files[0]);
 
         image.onload = function(){
             //this looks stupid but so is jquery
+            console.log(canvasHeight, canvasWidth);
+          /*  var sliderOptions = commonFactors(canvasHeight, canvasWidth);
+            $(function() {
+                $( "#slider" ).slider({
+                    min:0,
+                    max: sliderOptions.length,
+                    value: Math.floor(sliderOptions.length/2),
+                    slide: function(event, ui){
+                        console.log(sliderOptions[ui.value])
+                    }
+                });
+            });
+*/
             var newCanvas = $('<canvas/>',{'id': 'dataCanvas', 'wiDth': canvasWidth, 'hEight': canvasHeight});
             $('#canvases').append(newCanvas)
             var ctx = newCanvas[0].getContext('2d');
@@ -62,14 +76,13 @@ function getGrid(squareWidth,squareHeight, ctx){
 //right now we are multiplying things by 50. I dont know why. But at some point we will need to take in the 
 //numRows and numColumns data and use that tell the ctx where to print
 function render(colorData,canvasWidth,canvasHeight){
-    var squareSize = 50;
+    var squareSize = 20;
     var newCanvas = $('<canvas/>',{'id': 'printCanvas', 'wiDth': canvasWidth, 'hEight': canvasHeight});
     $('#canvases').append(newCanvas)
     var ctx = newCanvas[0].getContext('2d');
     //DONT FORGET: the yPos and xPos are relative to the array, not to the position where the rectangle is being printed on the canvas
    for(var yPos = 0, yLen = colorData.length; yPos < yLen; yPos++){
         for(var xPos = 0, xLen = colorData[yPos].length; xPos < xLen; xPos++){
-            console.log(xPos, yPos)
             ctx.fillStyle ='rgb(' + colorData[xPos][yPos].R +',' + colorData[xPos][yPos].G +',' + colorData[xPos][yPos].B+')';
             ctx.fillRect(yPos*squareSize,xPos*squareSize,squareSize,squareSize);
        }
