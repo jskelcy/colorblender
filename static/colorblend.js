@@ -13,34 +13,34 @@ $(document).ready(function(){
         reader.onload = function(e){
                 image.src = e.target.result;
                 canvasWidth = image.width;
-                canvasHeight = image.height;
-                console.log(canvasHeight, canvasWidth)
+                canvasHeight = image.height
             }
         
         reader.readAsDataURL(userPic.files[0]);
 
         image.onload = function(){
             //this looks stupid but so is jquery
-            console.log(canvasHeight, canvasWidth);
-          /*  var sliderOptions = commonFactors(canvasHeight, canvasWidth);
-            $(function() {
+           var sliderOptions = commonFactors(canvasHeight, canvasWidth);
+           console.log(sliderOptions)
+           $(function() {
                 $( "#slider" ).slider({
                     min:0,
-                    max: sliderOptions.length,
+                    max: sliderOptions.length-1,
                     value: Math.floor(sliderOptions.length/2),
                     slide: function(event, ui){
                         console.log(sliderOptions[ui.value])
+                        var numRows = canvasWidth/sliderOptions[ui.value]
+                        var numColumns = canvasHeight/sliderOptions[ui.value]
+                        var colorData = getGrid(numRows, numColumns,ctx, canvasWidth/numRows);
+                        console.log(canvasWidth)
+                        render(colorData, canvasWidth, canvasHeight, canvasWidth/numRows);
                     }
                 });
             });
-*/
             var newCanvas = $('<canvas/>',{'id': 'dataCanvas', 'wiDth': canvasWidth, 'hEight': canvasHeight});
             $('#canvases').append(newCanvas)
             var ctx = newCanvas[0].getContext('2d');
             ctx.drawImage(image, 0, 0);
-            var colorData = getGrid(50,50,ctx);
-            //finishes the data collection 
-            render(colorData, canvasWidth, canvasHeight);
         }
     });
 });
@@ -49,12 +49,9 @@ $(document).ready(function(){
 //this function  will take in specified grid infomation form user
 //It will then draw the grid onto the canvas  and return the color values 
 //the next thing that needs to happen is to take the numRows and numColumns and make that come from user input
-function getGrid(squareWidth,squareHeight, ctx){
+function getGrid(numRows,numColumns, ctx, squareSize){
     var gridValues =[];
     var yPosition = 0;
-    //these lines need to be arugents
-    var numRows = 38;
-    var numColumns = 21; 
     //vertical
     for(var row = 0; row < numRows; ++row){
         xPosition =0;
@@ -63,9 +60,9 @@ function getGrid(squareWidth,squareHeight, ctx){
         for(var column = 0; column < numColumns; ++column){
             var pixelData = ctx.getImageData(xPosition, yPosition, 1, 1).data;
             gridRow.push({'R':pixelData[0], 'G':pixelData[1], 'B': pixelData[2]});
-            xPosition += squareWidth;
+            xPosition += squareSize;
         }
-        yPosition += squareHeight;
+        yPosition += squareSize;
         gridValues.push(gridRow);
     }
     return gridValues;
@@ -75,14 +72,16 @@ function getGrid(squareWidth,squareHeight, ctx){
 //It well then draw a rectangles with the color in the colorData array.
 //right now we are multiplying things by 50. I dont know why. But at some point we will need to take in the 
 //numRows and numColumns data and use that tell the ctx where to print
-function render(colorData,canvasWidth,canvasHeight){
-    var squareSize = 20;
-    var newCanvas = $('<canvas/>',{'id': 'printCanvas', 'wiDth': canvasWidth, 'hEight': canvasHeight});
-    $('#canvases').append(newCanvas)
+function render(colorData,canvasWidth,canvasHeight, squareSize){
+    var newCanvas = $('#printCanvas')
+    if( newCanvas[0] === undefined){
+        var newCanvas = $('<canvas/>',{'id': 'printCanvas', 'wiDth': canvasWidth, 'hEight': canvasHeight});
+        $('#canvases').append(newCanvas)
+    }
     var ctx = newCanvas[0].getContext('2d');
     //DONT FORGET: the yPos and xPos are relative to the array, not to the position where the rectangle is being printed on the canvas
-   for(var yPos = 0, yLen = colorData.length; yPos < yLen; yPos++){
-        for(var xPos = 0, xLen = colorData[yPos].length; xPos < xLen; xPos++){
+    for(var yPos = 0, yLen = colorData[0].length-1; yPos < yLen; yPos++){
+        for(var xPos = 0, xLen = colorData.length-1; xPos < xLen; xPos++){
             ctx.fillStyle ='rgb(' + colorData[xPos][yPos].R +',' + colorData[xPos][yPos].G +',' + colorData[xPos][yPos].B+')';
             ctx.fillRect(yPos*squareSize,xPos*squareSize,squareSize,squareSize);
        }
