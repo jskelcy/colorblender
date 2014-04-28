@@ -37,8 +37,9 @@ $(document).ready(function(){
                     }
                 });
             });
-            var newCanvas = $('<canvas/>',{'id': 'dataCanvas', 'wiDth': canvasWidth, 'hEight': canvasHeight});
+            var newCanvas = $('<canvas/>').attr({'id': 'dataCanvas', 'wiDth': canvasWidth, 'hEight': canvasHeight,});
             $('#canvases').append(newCanvas)
+            $(newCanvas).css('display','none')
             var ctx = newCanvas[0].getContext('2d');
             ctx.drawImage(image, 0, 0);
         }
@@ -74,14 +75,16 @@ function getGrid(numRows,numColumns, ctx, squareSize){
 //numRows and numColumns data and use that tell the ctx where to print
 function render(colorData,canvasWidth,canvasHeight, squareSize){
     var newCanvas = $('#printCanvas')
+    //draws a new canvas on top of the old one 
     if( newCanvas[0] === undefined){
-        var newCanvas = $('<canvas/>',{'id': 'printCanvas', 'wiDth': canvasWidth, 'hEight': canvasHeight});
+        var newCanvas = $('<canvas/>').attr({'id': 'printCanvas', 'wiDth': canvasWidth, 'hEight': canvasHeight});
         $('#canvases').append(newCanvas)
     }
+    console.log(colorData)
     var ctx = newCanvas[0].getContext('2d');
     //DONT FORGET: the yPos and xPos are relative to the array, not to the position where the rectangle is being printed on the canvas
-    for(var yPos = 0, yLen = colorData[0].length-1; yPos < yLen; yPos++){
-        for(var xPos = 0, xLen = colorData.length-1; xPos < xLen; xPos++){
+    for(var yPos = 0, yLen = colorData[0].length-1; yPos <= yLen; yPos++){
+        for(var xPos = 0, xLen = colorData.length-1; xPos <= xLen; xPos++){
             ctx.fillStyle ='rgb(' + colorData[xPos][yPos].R +',' + colorData[xPos][yPos].G +',' + colorData[xPos][yPos].B+')';
             ctx.fillRect(yPos*squareSize,xPos*squareSize,squareSize,squareSize);
        }
