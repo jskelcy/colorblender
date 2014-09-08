@@ -9,7 +9,13 @@ $(document).ready(function(){
         var reader = new FileReader();
         var canvasWidth;
         var canvasHeight;
-
+	var screenSizes = [{width: 640, height: 960, label: "iPhone (4-inch)"},
+			   {width: 640, height: 1120, label: "iPhone (5-inch)"},
+			   {width: 768, height: 1024, label: "iPad (old)"},
+			   {width: 1536, height: 2048, label: "iPad (new)"},
+			   {width: 720, height: 1280, label: "Galaxy SIII"},
+			   {width: 1080, height: 1920, label: "Galaxy S4, S5, and Nexus 5"}];
+	
         reader.onload = function(e){
                 image.src = e.target.result;
                 canvasWidth = image.width;
