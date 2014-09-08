@@ -13,36 +13,36 @@ $(document).ready(function(){
         reader.onload = function(e){
                 image.src = e.target.result;
                 canvasWidth = image.width;
-                canvasHeight = image.height
-            }
+                canvasHeight = image.height;
+            };
         
         reader.readAsDataURL(userPic.files[0]);
 
         image.onload = function(){
             //this looks stupid but so is jquery
            var sliderOptions = commonFactors(canvasHeight, canvasWidth);
-           console.log(sliderOptions)
+           console.log(sliderOptions);
            $(function() {
                 $( "#slider" ).slider({
                     min:0,
                     max: sliderOptions.length-1,
                     value: Math.floor(sliderOptions.length/2),
                     slide: function(event, ui){
-                        console.log(sliderOptions[ui.value])
-                        var numRows = canvasWidth/sliderOptions[ui.value]
-                        var numColumns = canvasHeight/sliderOptions[ui.value]
+                        console.log(sliderOptions[ui.value]);
+                        var numRows = canvasWidth/sliderOptions[ui.value];
+                        var numColumns = canvasHeight/sliderOptions[ui.value];
                         var colorData = getGrid(numRows, numColumns,ctx, canvasWidth/numRows);
-                        console.log(canvasWidth)
+                        console.log(canvasWidth);
                         render(colorData, canvasWidth, canvasHeight, canvasWidth/numRows);
                     }
                 });
             });
             var newCanvas = $('<canvas/>').attr({'id': 'dataCanvas', 'wiDth': canvasWidth, 'hEight': canvasHeight,});
-            $('#canvases').append(newCanvas)
-            $(newCanvas).css('display','none')
+            $('#canvases').append(newCanvas);
+       //     $(newCanvas).css('display','none');
             var ctx = newCanvas[0].getContext('2d');
             ctx.drawImage(image, 0, 0);
-        }
+        };
     });
 });
 
@@ -74,13 +74,14 @@ function getGrid(numRows,numColumns, ctx, squareSize){
 //right now we are multiplying things by 50. I dont know why. But at some point we will need to take in the 
 //numRows and numColumns data and use that tell the ctx where to print
 function render(colorData,canvasWidth,canvasHeight, squareSize){
-    var newCanvas = $('#printCanvas')
+    var newCanvas = $('#printCanvas');
     //draws a new canvas on top of the old one 
     if( newCanvas[0] === undefined){
-        var newCanvas = $('<canvas/>').attr({'id': 'printCanvas', 'wiDth': canvasWidth, 'hEight': canvasHeight});
-        $('#canvases').append(newCanvas)
+	// lyndsey wrote this jquery hack but does not remember why six months later
+        newCanvas = $('<canvas/>').attr({'id': 'printCanvas', 'wiDth': canvasWidth, 'hEight': canvasHeight});
+        $('#canvases').append(newCanvas);
     }
-    console.log(colorData)
+    console.log(colorData);
     var ctx = newCanvas[0].getContext('2d');
     //DONT FORGET: the yPos and xPos are relative to the array, not to the position where the rectangle is being printed on the canvas
     for(var yPos = 0, yLen = colorData[0].length-1; yPos <= yLen; yPos++){
@@ -96,8 +97,8 @@ function commonFactors(value1, value2){
     var min = Math.min(value1, value2);
     var commonArray = _.filter(_.range(1, min+1),function(x){
         if(value1%x === 0 && value2%x === 0){
-            return true
+            return true;
         }
-    })
-    return commonArray
+    });
+    return commonArray;
 }
