@@ -1,34 +1,44 @@
-$(document).ready(function(){
-    $('#submit').click(function(){
-                 
-       //image init 
-        var userPic = $('#userPic');
-        var image = new Image();
-        userPic = userPic[0];
-        //canvas init 
-        var reader = new FileReader();
-        var canvasWidth;
-        var canvasHeight;
-	var screenSizes = [{width: 640, height: 960, label: "iPhone (4-inch)"},
-			   {width: 640, height: 1120, label: "iPhone (5-inch)"},
-			   {width: 768, height: 1024, label: "iPad (old)"},
-			   {width: 1536, height: 2048, label: "iPad (new)"},
-			   {width: 720, height: 1280, label: "Galaxy SIII"},
-			   {width: 1080, height: 1920, label: "Galaxy S4, S5, and Nexus 5"}];
-	
-        reader.onload = function(e){
+;(function() {
+    $(document).ready(function(){
+        var screenSizes = [{id: 0, width: 640, height: 960, label: "iPhone (4-inch)", make: "Apple"},
+                           {id: 1, width: 640, height: 1120, label: "iPhone (5-inch)", make: "Apple"},
+                           {id: 2, width: 768, height: 1024, label: "iPad (old)", make: "Apple"},
+                           {id: 3, width: 1536, height: 2048, label: "iPad (new)", make: "Apple"},
+                           {id: 4, width: 720, height: 1280, label: "Galaxy SIII", make: "Android"},
+                           {id: 5, width: 1080, height: 1920, label: "Galaxy S4, S5, and Nexus 5", make: "Android"}];
+
+        function populateSlider(options) {
+            _.map(options, function(size) {
+                $("#sizeselector").append("<option value='" + size.id + "'>" +
+                                          size.label + "</option>");
+            });
+        }
+
+        populateSlider(screenSizes);
+
+        $('#submit').click(function(){
+            //image init
+            var userPic = $('#userPic');
+            var image = new Image();
+            userPic = userPic[0];
+            //canvas init
+            var reader = new FileReader();
+            var canvasWidth;
+            var canvasHeight;
+
+            reader.onload = function(e){
                 image.src = e.target.result;
                 canvasWidth = image.width;
                 canvasHeight = image.height;
             };
-        
-        reader.readAsDataURL(userPic.files[0]);
 
-        image.onload = function(){
-            //this looks stupid but so is jquery
-           var sliderOptions = commonFactors(canvasHeight, canvasWidth);
-           console.log(sliderOptions);
-           $(function() {
+            reader.readAsDataURL(userPic.files[0]);
+
+            image.onload = function(){
+                //adjusts slider ratio to fit canvas size
+                //this looks stupid but so is jquery
+                var sliderOptions = commonFactors(canvasHeight, canvasWidth);
+                console.log(sliderOptions);
                 $( "#slider" ).slider({
                     min:0,
                     max: sliderOptions.length-1,
