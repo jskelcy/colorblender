@@ -1,5 +1,5 @@
 {
-  "name": "fun",
+  "name": "Colorblender",
   "version": "0.0.0",
   "description": "",
   "main": "app.js",
@@ -10,7 +10,7 @@
     "type": "git",
     "url": "https://github.com/jskelcy/colorblender.git"
   },
-  "author": "Jake Skelcy",
+  "author": "Jake Skelcy and Lyndsey Moulds",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/jskelcy/colorblender/issues"
